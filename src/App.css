@@ -206,5 +206,8 @@ input:focus{
   #recipe-flex{
     padding:0.5rem;
   }
-
+.card-content{
+  width:100%;
+  height:100%;
+}
 }

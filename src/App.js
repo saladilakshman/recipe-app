@@ -65,7 +65,7 @@ paddingLeft:'1rem'
           splittedText[0]=firstLetter
           const joinedText=splittedText.join('');
           setQuery(joinedText);
-  prefetching(query)
+  return prefetching(query)
         }
       }}>search</button>
       </div>
