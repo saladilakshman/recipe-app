@@ -20,7 +20,7 @@ function prefetching(query){
 }
   useEffect(()=>{
    prefetching(query)
-  },[data,query])
+  },[query])
   return (
     <div className="App">
      <header>
@@ -65,7 +65,8 @@ paddingLeft:'1rem'
           splittedText[0]=firstLetter
           const joinedText=splittedText.join('');
           setQuery(joinedText);
-  return prefetching(query)
+  //prefetching(query)
+  return
         }
       }}>search</button>
       </div>
