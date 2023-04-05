@@ -124,7 +124,7 @@ paddingLeft:'1rem'
       </article>
       </div>
 }
- {!error &&<h2 style={{
+ {error &&<h2 style={{
   textAlign:'center',
   fontFamily:'helvetica',
   color:'red',
