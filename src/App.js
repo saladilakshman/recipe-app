@@ -7,7 +7,7 @@ function App() {
   const[load,setLoad]=useState(true);
   const[singleItem,setSingleItem]=useState({});
   const[isvisible,setIsvisible]=useState(false);
-  const[error,setError]=useState(false);
+  const[error,setError]=useState();
 const[query,setQuery]=useState('Chicken');
   useEffect(()=>{
     axios.get(`https://api.edamam.com/search?q=${query}&app_id=31091f28&app_key=e3050d3b4fd7b7fc83b876c06ca2b51a&ingr=20`)
@@ -23,8 +23,8 @@ const[query,setQuery]=useState('Chicken');
       setError(prevState=>!prevState)
     }
   })
-  .catch(()=>setError(true));
-  },[query,error])
+  .catch(()=>setError(prevState=>!prevState));
+  },[query])
   return (
     <div className="App">
      <header>
@@ -70,9 +70,8 @@ paddingLeft:'1rem'
           splittedText[0]=firstLetter
           const joinedText=splittedText.join('');
           setQuery(joinedText);
-          setLoad(true)
           setData([])
-          setError(!error)
+setError(prevState=>!prevState)
   return
         }
       }}>search</button>
@@ -127,9 +126,10 @@ paddingLeft:'1rem'
  {error &&<h2 style={{
   textAlign:'center',
   fontFamily:'helvetica',
+  marginTop:'4rem',
   color:'red',
   fontWeight:'500'
- }}>No recipes found</h2>}  
+ }}>No recipes found</h2> } 
    
     </div>
   );
