@@ -1,5 +1,5 @@
 import React,{useState,useEffect}from "react";
-//import axios from "axios";
+import axios from "axios";
 import Flip from 'react-reveal/Flip';
 import './App.css';
 function App() {
@@ -7,20 +7,24 @@ function App() {
   const[load,setLoad]=useState(true);
   const[singleItem,setSingleItem]=useState({});
   const[isvisible,setIsvisible]=useState(false);
-  
+  const[error,setError]=useState(false);
 const[query,setQuery]=useState('Chicken');
-function prefetching(query){
-  fetch(`https://api.edamam.com/search?q=${query}&app_id=31091f28&app_key=e3050d3b4fd7b7fc83b876c06ca2b51a&ingr=20`)
-  .then(response => response.json())
-  .then(data =>{
-   setData(data.hits)
-    setLoad(false)
-  })
-  .catch(error => console.error(error));
-}
   useEffect(()=>{
-   prefetching(query)
-  },[query])
+    axios.get(`https://api.edamam.com/search?q=${query}&app_id=31091f28&app_key=e3050d3b4fd7b7fc83b876c06ca2b51a&ingr=20`)
+  .then(res=>{
+    if(res.status===200){
+      setData(res.data.hits)
+      setLoad(false)
+      //setError(false)
+    }
+    else{
+      setData([]);
+      setLoad(false);
+      setError(prevState=>!prevState)
+    }
+  })
+  .catch(()=>setError(true));
+  },[query,error])
   return (
     <div className="App">
      <header>
@@ -38,22 +42,23 @@ function prefetching(query){
       gap:'0.5rem',
       marginBlockStart:'2rem'}}>
       <input type="search"style={{
-width:'15rem',
+width:'18rem',
 boxShadow:'0px 0px 5px rgba(0,0,0,0.5)',
 border:'none',
 height:'1.8rem',
-borderRadius:'0.8rem',
+borderRadius:'0.2rem',
 paddingLeft:'1rem'
-      }}className="input-search"placeholder='salads,drinks,cookies,pasta'/>
+      }}className="input-search"placeholder='Salads,drinks,cookies,pasta'/>
       <button style={{
         border:'none',
         backgroundColor:'#EF5B5B',
         color:'white',
-        borderRadius:'0.8rem',
+        width:'5rem',
+        borderRadius:'0.2rem',
     height:'1.8rem',
     paddingInlineStart:'0.5rem',
     paddingInlineEnd:'0.5rem'
-      }} onClick={()=>{
+      }} id="search-button"onClick={()=>{
         const searchInput=document.querySelector('.input-search');
         //Check whether user entered the value or not
         if(searchInput.value===""){
@@ -65,15 +70,18 @@ paddingLeft:'1rem'
           splittedText[0]=firstLetter
           const joinedText=splittedText.join('');
           setQuery(joinedText);
-  //prefetching(query)
+          setLoad(true)
+          setData([])
+          setError(!error)
   return
         }
       }}>search</button>
       </div>
-     
-      {load? <div className="loading-icon">
+     {load && <div className="loading-icon">
         <img src="https://cdn-icons-png.flaticon.com/512/2276/2276931.png"alt=""className="loading-logo"/>
-      </div>: <div style={{
+      </div>}
+      {data &&
+       <div style={{
         display:'flex',
         justifyContent:'center',
         alignItems:'center'}} id="recipe-flex">
@@ -115,8 +123,13 @@ paddingLeft:'1rem'
       })}
       </article>
       </div>
-      }
-      
+}
+ {!error &&<h2 style={{
+  textAlign:'center',
+  fontFamily:'helvetica',
+  color:'red',
+  fontWeight:'500'
+ }}>No recipes found</h2>}  
    
     </div>
   );
