@@ -15,15 +15,15 @@ const[query,setQuery]=useState('Chicken');
     if(res.status===200){
       setData(res.data.hits)
       setLoad(false)
-      //setError(false)
+      setError()
     }
     else{
       setData([]);
       setLoad(false);
-      setError(prevState=>!prevState)
+      setError(error)
     }
   })
-  .catch(()=>setError(prevState=>!prevState));
+  .catch((err)=>console.log(err));
   },[query])
   return (
     <div className="App">
@@ -70,8 +70,9 @@ paddingLeft:'1rem'
           splittedText[0]=firstLetter
           const joinedText=splittedText.join('');
           setQuery(joinedText);
+          setLoad(true)
           setData([])
-setError(prevState=>!prevState)
+
   return
         }
       }}>search</button>
@@ -79,7 +80,7 @@ setError(prevState=>!prevState)
      {load && <div className="loading-icon">
         <img src="https://cdn-icons-png.flaticon.com/512/2276/2276931.png"alt=""className="loading-logo"/>
       </div>}
-      {data &&
+      {data && 
        <div style={{
         display:'flex',
         justifyContent:'center',
