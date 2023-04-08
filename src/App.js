@@ -24,7 +24,7 @@ const[query,setQuery]=useState('Chicken');
     }
   })
   .catch((err)=>console.log(err));
-  },[query])
+  },[query,error])
   return (
     <div className="App">
      <header>
